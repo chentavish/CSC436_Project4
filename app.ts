@@ -1,8 +1,11 @@
 import express from 'express';
 import { config } from './config/env.ts';
+import { logger } from './middleware/logger.ts';
+import { notFound, errorHandler } from './middleware/errors.ts';
 
 const app = express();
 
+app.use(logger);
 app.use(express.json()); // turns JSON request bodies into req.body
 
 app.get('/', (req, res) => {
@@ -20,5 +23,8 @@ app.get('/api/health', (req, res) => {
     time: new Date().toISOString(),
   });
 });
+
+app.use(notFound);
+app.use(errorHandler);
 
 export default app;
