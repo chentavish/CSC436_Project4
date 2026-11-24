@@ -3,15 +3,17 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev": "node --watch server.ts",
+    "dev": "node --watch --env-file=.env server.ts",
     "typecheck": "tsc",
-    "start": "node server.ts"
+    "start": "node --env-file=.env server.ts",
+    "types": "npx supabase gen types typescript --project-id ootjxgbaesqvhifzadly --schema public > data/database.types.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@supabase/supabase-js": "^2.119.2",
     "express": "^5.3.0"
   },
   "devDependencies": {
