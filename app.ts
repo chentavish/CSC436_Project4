@@ -2,6 +2,7 @@ import express from 'express';
 import { config } from './config/env.ts';
 import { logger } from './middleware/logger.ts';
 import { notFound, errorHandler } from './middleware/errors.ts';
+import applicationsRouter from './routes/applications.ts';
 
 const app = express();
 
@@ -23,6 +24,8 @@ app.get('/api/health', (req, res) => {
     time: new Date().toISOString(),
   });
 });
+
+app.use('/api/applications', applicationsRouter);
 
 app.use(notFound);
 app.use(errorHandler);
