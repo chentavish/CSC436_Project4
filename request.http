@@ -1,0 +1,84 @@
+# Job Application Tracker API test requests
+# Start the server then click "Send Request" 
+
+@base = http://localhost:3000
+# @base = https://your-project.vercel.app
+
+### Health check (expect 200)
+GET {{base}}/api/health
+
+### API info
+GET {{base}}/
+
+### Read: every application, newest first
+GET {{base}}/api/applications
+
+### Filter: only interviews
+GET {{base}}/api/applications?status=interview
+
+### Filter: company name contains "goo"
+GET {{base}}/api/applications?company=goo
+
+### Read: one application
+GET {{base}}/api/applications/2
+
+### Read: an id that does not exist (expect 404)
+GET {{base}}/api/applications/99
+
+### Read: an id that is not a number (expect 404, not 500)
+GET {{base}}/api/applications/two
+
+### Create: a good application (expect 201 with a new id)
+# @name created
+POST {{base}}/api/applications
+Content-Type: application/json
+
+{
+  "company": "Notion",
+  "role": "Software Engineer",
+  "notes": "Found on LinkedIn"
+}
+
+### Create: a bad application (expect 400 with a list of problems)
+POST {{base}}/api/applications
+Content-Type: application/json
+
+{
+  "company": "",
+  "status": "ghosted",
+  "applied_on": "2026-02-30"
+}
+
+### Create: broken JSON (expect 400)
+POST {{base}}/api/applications
+Content-Type: application/json
+
+{ "company": "oops
+
+### Update: the one you just created (expect 200)
+PATCH {{base}}/api/applications/{{created.response.body.id}}
+Content-Type: application/json
+
+{
+  "status": "interview"
+}
+
+### Update: an empty body (expect 400)
+PATCH {{base}}/api/applications/2
+Content-Type: application/json
+
+{}
+
+### Update: an id that does not exist (expect 404)
+PATCH {{base}}/api/applications/99
+Content-Type: application/json
+
+{
+  "status": "offer"
+}
+
+### Delete: the one you just created (expect 204, run again for 404)
+DELETE {{base}}/api/applications/{{created.response.body.id}}
+
+### A route that does not exist (expect JSON 404)
+GET {{base}}/api/jobs

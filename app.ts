@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import { config } from './config/env.ts';
 import { logger } from './middleware/logger.ts';
 import { notFound, errorHandler } from './middleware/errors.ts';
@@ -7,6 +8,7 @@ import applicationsRouter from './routes/applications.ts';
 const app = express();
 
 app.use(logger);
+app.use(cors({ origin: config.corsOrigins }));
 app.use(express.json()); // turns JSON request bodies into req.body
 
 app.get('/', (req, res) => {
